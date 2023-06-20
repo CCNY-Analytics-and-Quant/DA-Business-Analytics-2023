@@ -12,3 +12,4 @@ SELECT ord_dets.pizza_id
             ON ord_dets.pizza_id = price.pizza_id
         LEFT JOIN pizza_types types
             ON price.pizza_type_id = types.pizza_type_id
+
