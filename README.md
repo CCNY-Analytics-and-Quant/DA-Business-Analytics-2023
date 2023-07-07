@@ -1,4 +1,5 @@
 # Mamma Mia's
+# WEBSITE LINK : https://jeansfirstapp0806-c00b1f941514.herokuapp.com/
 ### Mama Mia Group met through Zoom and Discord to discuss ideas and apply the analytical process to the following question: 
 ### “I am looking to open a pizza restaurant, what suggestions do you have for success?”
 ### This question was reframed to, what opportunities do you have to maximize profit? From there we figured out what information we needed to identify this opportunity. We extracted our information from the “sum_23” pizza database, as well as information from CNY Weather. We then created and discussed data that was important for us to use, we discussed joins and worked with SQL to join tables together. With the data, we created a couple of tables and discussed the trends and relationships of the data. Lastly, we built a presentation for the CEO that tells a story. 
