@@ -5,7 +5,7 @@ Welcome to the Python for Business Analytics course repository. This project is 
 ![Project Screenshot](https://github.com/CCNY-Analytics-and-Quant/DA-Business-Analytics-2023/blob/main/Requirements.png)
 
 ## Final Product
-Our final product is an interactive dashboard that represents the analysis of sample data extracted via SQL queries from a cloud server. This dashboard was meticulously set up by our esteemed Professor John Droescher.
+Our final product is an interactive dashboard that represents the analysis of sample data extracted via SQL queries from a cloud server. This SQL server we connected to was meticulously set up by our esteemed Professor John Droescher.
 
 [Full Website with Interactive Dashboard](https://jeanspizzadash-8c916a04955f.herokuapp.com)
 
