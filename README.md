@@ -4,14 +4,15 @@
 
 ## Our project was composed of three members:
 ### Jean Batista(Jbat005) - Responsible for :
-####  - SQL queries.
-#### - Python data exploration and manipulation.
-#### - Data visualizations.
-#### - Deployment of app onto website.
+#####  - SQL queries.
+##### - Python data exploration and manipulation.
+##### - Data visualizations.
+##### - Deployment of app onto website.
+#####     
 
-###  - Deanisse Beato - Responsible for :
-#### - Data visualizations.
+### Deanisse Beato - Responsible for :
+##### - Data visualizations.
 
 ### Lizbeth Guzman - Responsible for :
-#### Powerpoint Presentation
+##### Powerpoint Presentation
 
