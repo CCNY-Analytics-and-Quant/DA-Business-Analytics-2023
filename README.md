@@ -1,14 +1,11 @@
-# Python for Business Analytics - Summer 2023 Project
+# Python for Business Analytics 
 
 Welcome to the Python for Business Analytics summer course repository. This project features a comprehensive analysis for opening a pizza restaurant.
 
 ## Project Overview
-The analysis was performed using SQL, Python, and various business intelligence tools to explore the opportunities for opening a successful pizza restaurant. Charts, graphs, and insightful data representations are used to support the strategic decisions highlighted in our proposal.
+I was given an operational database of a pizza restaurant, and my task was to provide opportunities for success for the restaurant through a report after first preparing the data with MySQL. I cleaned up the data with Python and Pandas and used the data available to me to visualize the most critical takeaways from the year's worth of data. I then added interactivity and pushed it to a web app, allowing the user to explore the data themselves. I used the dash libraries to incorporate CSS and html into python code, allowing me to stylize the website and provide interactivy to the user.
 
-## Final Product
-I took the direction of creating a website that can be sent to the stakeholder (CEO). Our final product is an interactive dashboard that represents the analysis of sample data extracted via SQL queries from a cloud server. This SQL server we connected to was meticulously set up by our esteemed Professor John Droescher.
-
-[Full Website with Interactive Dashboard](https://jeanspizzadash-8c916a04955f.herokuapp.com)
+[Full Website with Interactive Dashboard](https://doc-pastor-remote-l069-2273e74aa948.herokuapp.com)
 
 
 
@@ -27,11 +24,10 @@ For any queries regarding the project, feel free to reach out:
 
 The detailed project report and the link to the interactive dashboard are available below:
 
-[Full Website with Interactive Dashboard](https://jeanspizzadash-8c916a04955f.herokuapp.com)
 
-Thank you for visiting our project repository!
+Thank you for visiting my project repository!
 
-<img src="https://github.com/CCNY-Analytics-and-Quant/DA-Business-Analytics-2023/blob/main/Requirements.png" width="900" height="800" alt="Project Screenshot">
+<img src="https://github.com/CCNY-Analytics-and-Quant/DA-Business-Analytics-2023/blob/main/Requirements.png" width="600" height="600" alt="Project Screenshot">
 
 
 
