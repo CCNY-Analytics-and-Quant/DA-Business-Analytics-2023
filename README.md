@@ -15,6 +15,7 @@ The interactive dashboard allows for an intuitive exploration of the data, provi
 
 ## Contact
 For any queries regarding the project, feel free to reach out:
+- Me : Jean Batista - batistajean78@gmail.com
 - Instructor: John Droescher - jdroescher@ccny.cuny.edu
 
 ## Repository Structure
