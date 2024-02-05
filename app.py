@@ -8,7 +8,7 @@ import plotly.subplots as sp
 import plotly.graph_objects as go
 from dash import Dash, html, dcc
 import numpy as np
-
+from plotly.subplots import make_subplots
 
 
 
@@ -96,6 +96,7 @@ app.layout = html.Div(style={
         dcc.Tab(label='Weather Correlation', value='tab-2', style=tab_style, selected_style=tab_selected_style),
         dcc.Tab(label='Variety', value='tab-3', style=tab_style, selected_style=tab_selected_style),
         dcc.Tab(label='Sizes', value='tab-4', style=tab_style, selected_style=tab_selected_style),
+        dcc.Tab(label='GitHub', value='tab-5', style=tab_style, selected_style=tab_selected_style),
     ], style=tabs_styles),
     html.Div(id='content')
 ])
@@ -111,7 +112,7 @@ def render_content(tab):
         return html.Div([
             html.H2('Orders each Hour', style={'color': '#FFFFFF'}),
             html.Div(
-                'Minimize labor cost by optimizing staffing hours based on peak time intervals for orders. This change reduces staffed hours by 59.6%, cutting expenses by approximately $79,560 per year. (Assuming a wage of $15 per employee, and baseline default of 2-3 employees per hour depending time of day(red dotted line))',
+                'Minimize labor cost by optimizing staffing hours based on peak time intervals for orders.',
                 style={
                     'fontSize': '17px',  # slighter smaller than top text size
                     'marginBottom': '20px',  # Space below the sub-text
@@ -129,7 +130,20 @@ def render_content(tab):
             html.Div([
                 dcc.Graph(id='heatmap-graph'),
                 dcc.Graph(id='employee-area-chart')  # New Graph for Employee Count
-            ]) 
+            ]),
+            html.Div([
+            html.H2('Actionable Insights for Optimized Restaurant Success', style={'color': '#FFFFFF'}),
+            html.Div([
+                dcc.Markdown('''
+                    **Key Performance Indicators (KPIs) to Optimize Success:**
+
+                    - Reduce labor costs by 59% (approximately $79,560 annually) by adjusting staffing hours based on demand. 
+                    - This optimization results from analyzing peak hours and adjusting the schedule accordingly, moving from an estimated 253 standard hours to 151 optimized hours weekly.
+                ''',
+                style={'fontSize': '17px', 'color': '#FFFFFF'}
+                ),
+        ])
+        ])
         ])
     elif tab == 'tab-2':
         return html.Div([
@@ -137,7 +151,25 @@ def render_content(tab):
             dcc.Graph(
                 id='subplot-graph',
                 figure=update_subplot_graph()
-            )
+            ),
+            html.H2(' Otimized Operating Cost vs. Rainfall'),
+            dcc.Graph(
+                id='cost-rainfall-graph',
+                figure=update_revenue_cost_rainfall_graph()
+            ),
+            html.Div([
+            html.H2('Actionable Insights for Optimized Restaurant Success', style={'color': '#FFFFFF'}),
+            html.Div([
+                dcc.Markdown('''
+                    **Key Performance Indicators (KPIs) to Optimize Success:**
+
+                    - Reduce operating costs by 6% (approximately $30,780 annually) by adjusting operating cost based on weather conditions. 
+                    - This optimization results from analyzing weather conditions and adjusting the resource allocation appropiately, resulting in a change from an estimated $503,417 spent per year to $472,637.
+                ''',
+                style={'fontSize': '17px', 'color': '#FFFFFF'}
+                ),
+        ])
+        ])
         ])
     elif tab == 'tab-3':
         return html.Div([
@@ -176,6 +208,19 @@ def render_content(tab):
                 figure=update_pie_chart()
             )
         ])
+    elif tab == 'tab-5':
+        return html.Div([
+            html.H2('Overview', style={'color': '#FFFFFF'}),
+            html.P('For more detailed information and to view the source code, please visit the GitHub repository:'),
+            dcc.Link('Visit GitHub Repository', href='https://github.com/CCNY-Analytics-and-Quant/DA-Business-Analytics-2023', target='_blank', style={
+             'color': '#7FDBFF',
+                'fontSize': '20px',
+                'display': 'block',
+                'textAlign': 'center',
+                'marginTop': '20px',
+            })
+    ])
+
     
 # Creating function that applies same style to all graphs   
 def style_graph(graph): 
@@ -263,7 +308,7 @@ def generate_employee_area_chart(day):
     # profit is 15 * 10 = 150 an hour. Wage for 3 employees is 45 an hour. 
     # wage over proft ratio = 0.30
 
-    # 2 employees if more than (520 in a year) 10 pizzas sold in an hour 
+    # 2 Employees if more than (520 in a year) 10 pizzas sold in an hour 
     # average price of pizza is $ 20. Suppose margin is 50% = $10.
     # profit is 10 * 10 = 100 an hour. Wage for 2 employees is 30 an hour.
     # wage over proft ratio = 0.30
@@ -300,7 +345,7 @@ def generate_employee_area_chart(day):
 
     # Update layout
     area_chart_fig.update_layout(
-        title=f'Employee Count by Hour for {day} | Optimized employee count is calculated to maintain a wage / profit ratio of .40 for 1 employee, and .30 for 2,3, or 4 employees.',
+        title=f'Employee Count by Hour for {day}',
         margin=dict(l=140, r=40, t=40, b=40),
         xaxis_title='Hour',
         yaxis_title='Employee Count'
@@ -338,8 +383,82 @@ def update_subplot_graph():
         ),
         legend=dict(x=0, y=1.2, orientation='h')
     )
+    return style_graph(fig)
+
+def update_revenue_cost_rainfall_graph():
+    # Assumes df and rain are pre-loaded DataFrames with relevant data
+    rainfall_data = rain.groupby('month').sum()
+    results = df.groupby('month')['price'].sum()
+    months = list(range(1, 13))
+    days_in_month = [calendar.monthrange(2015, month)[1] for month in months]
+    adjusted_quantity = results / days_in_month 
+    operating_costs = (adjusted_quantity * .4) + 500 # Adjust based on realistic business costs
+
+    # Dynamic cost multiplier inversely proportional to rainfall
+    base_cost_multiplier = 250
+    max_rainfall = rainfall_data['rainfall'].max()
+    normalized_rainfall = rainfall_data['rainfall'] / max_rainfall
+    dynamic_cost_multiplier = 1 - normalized_rainfall  # Inverse relationship
+
+    # Calculate optimized operating costs purely based on inverse rainfall relationship
+    # Here, we adjust the base cost multiplier inversely with the normalized rainfall
+    min_operating_cost = 1200  # Adjust based on realistic business costs
+    optimized_operating_costs = (base_cost_multiplier * dynamic_cost_multiplier) + min_operating_cost
+
+    # Ensure operating costs do not fall below the minimum threshold
+
+    optimized_operating_costs = np.maximum(optimized_operating_costs, min_operating_cost)
+
+    # Adding variability
+    offset_percentage = 0.1
+    variable_offset = optimized_operating_costs * offset_percentage
+    np.random.seed(1)
+    random_offsets = np.random.uniform(-1, 1, size=optimized_operating_costs.shape) * variable_offset
+    optimized_operating_costs += random_offsets
+    amount_spent1 = (operating_costs.sum()) * (365/12)
+    amount_spent2 = (optimized_operating_costs.sum()) * (365/12)
+    difference_in_op_cost = amount_spent1 - amount_spent2
+
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # Traces
+    fig.add_trace(go.Scatter(
+        x=rainfall_data.index,
+        y=rainfall_data['rainfall'],  # Actual Rainfall
+        name='Rainfall',
+        mode='lines+markers',
+        marker=dict(color='blue')
+    ), secondary_y=False)
+
+    fig.add_trace(go.Scatter(
+        x=list(range(1, 13)),
+        y=operating_costs,
+        name='Est. Daily Operating Costs(Based on revenue)',
+        mode='lines',
+        line=dict(color='red')
+    ), secondary_y=True)
+
+    fig.add_trace(go.Scatter(
+        x=rainfall_data.index,
+        y=optimized_operating_costs,
+        name='Optimized Operating Costs (Weather Adjusted)',
+        mode='lines',
+        line=dict(color='green', dash='dot')
+    ), secondary_y=True)
+
+    # Layout updates
+    fig.update_layout(
+        title='Est. Operating Cost vs. Rainfall Adjusted Operating Costs',
+        xaxis_title='Month',
+        xaxis=dict(tickvals=list(range(1, 13)), ticktext=[calendar.month_name[i] for i in range(1, 13)]),
+    )
+ 
+
+    fig.update_yaxes(title_text="Rainfall (inches)", secondary_y=False)
+    fig.update_yaxes(title_text="Operating Cost ($)", secondary_y=True)
 
     return style_graph(fig)
+
 
 # Slider tab 3 callback
 @app.callback(
