@@ -90,7 +90,7 @@ app.layout = html.Div(style={
     'minHeight': '100vh',  # Full view height
     'padding': '35px'  # Padding everywhere
 }, children=[
-    html.H1("Python for Business Analytics - Jean Batista", style={'color': '#FFFFFF','textAlign': 'center'}), # center text color white 
+    html.H1("Python for Business Analytics - Jean Batista", style={'color': '#FFFFFF','textAlign': 'center','fontSize':'30px'}), # center text color white 
     dcc.Tabs(id="tabs", value='tab-1', children=[
         dcc.Tab(label='Peak Hours', value='tab-1', style=tab_style, selected_style=tab_selected_style),
         dcc.Tab(label='Weather Correlation', value='tab-2', style=tab_style, selected_style=tab_selected_style),
@@ -110,11 +110,11 @@ app.layout = html.Div(style={
 def render_content(tab):
     if tab == 'tab-1':
         return html.Div([
-            html.H2('Orders each Hour', style={'color': '#FFFFFF'}),
+            html.H2('Orders each Hour', style={'color': '#FFFFFF','fontSize': '24px'}),
             html.Div(
                 'Minimize labor cost by optimizing staffing hours based on peak time intervals for orders.',
                 style={
-                    'fontSize': '17px',  # slighter smaller than top text size
+                    'fontSize': '18px',  # slighter smaller than top text size
                     'marginBottom': '20px',  # Space below the sub-text
                     'marginTop': '5px'  # Space above the sub-text
                 }
@@ -132,48 +132,60 @@ def render_content(tab):
                 dcc.Graph(id='employee-area-chart')  # New Graph for Employee Count
             ]),
             html.Div([
-            html.H2('Actionable Insights for Optimized Restaurant Success', style={'color': '#FFFFFF'}),
+            html.H2('Proposed Changes:', style={'color': '#FFFFFF','fontSize': '24px'}),
             html.Div([
                 dcc.Markdown('''
-                    **Key Performance Indicators (KPIs) to Optimize Success:**
-
                     - Reduce labor costs by 59% (approximately $79,560 annually) by adjusting staffing hours based on demand. 
-                    - This optimization results from analyzing peak hours and adjusting the schedule accordingly, moving from an estimated 253 standard hours to 151 optimized hours weekly.
+                    - This makes the change from 253 to 151 hours weekly.
                 ''',
-                style={'fontSize': '17px', 'color': '#FFFFFF'}
+                style={'fontSize': '16px', 'color': '#FFFFFF'}
                 ),
         ])
         ])
         ])
     elif tab == 'tab-2':
         return html.Div([
-            html.H2('Rainfall and Total Quantity Sold'),
+            html.H2('Adverse relationships between weather and sales.', style={'color': '#FFFFFF','fontSize': '24px'}),
+            html.Div('2015 Sales Data & Rain Data',
+                style={
+                    'fontSize': '18px',  # slighter smaller than top text size
+                    'marginBottom': '20px',  # Space below the sub-text
+                    'marginTop': '5px'  # Space above the sub-text
+                }
+            ),
             dcc.Graph(
                 id='subplot-graph',
                 figure=update_subplot_graph()
             ),
-            html.H2(' Otimized Operating Cost vs. Rainfall'),
+            html.H2(' Optimizing Operating Cost', style={'color': '#FFFFFF','fontSize': '24px'}),
+            html.Div(
+                'The restaurant can optimize operating costs by adjusting based on expected weather conditions',
+                style={
+                    'fontSize': '18px',  # slighter smaller than top text size
+                    'marginBottom': '20px',  # Space below the sub-text
+                    'marginTop': '5px'  # Space above the sub-text
+                }
+            ),
             dcc.Graph(
                 id='cost-rainfall-graph',
                 figure=update_revenue_cost_rainfall_graph()
             ),
             html.Div([
-            html.H2('Actionable Insights for Optimized Restaurant Success', style={'color': '#FFFFFF'}),
+            html.H2('Proposed Changes:', style={'color': '#FFFFFF','fontSize': '24px'}),
             html.Div([
                 dcc.Markdown('''
-                    **Key Performance Indicators (KPIs) to Optimize Success:**
-
-                    - Reduce operating costs by 6% (approximately $30,780 annually) by adjusting operating cost based on weather conditions. 
-                    - This optimization results from analyzing weather conditions and adjusting the resource allocation appropiately, resulting in a change from an estimated $503,417 spent per year to $472,637.
+                    - Aim to keep operating costs reflective of weather conditions.
+                    - Reduce operating costs by 6% (approximately $30,780 annually).
+                    - This changes an estimated $503,417 spent per year to $472,637.
                 ''',
-                style={'fontSize': '17px', 'color': '#FFFFFF'}
+                style={'fontSize': '18px', 'color': '#FFFFFF'}
                 ),
         ])
         ])
         ])
     elif tab == 'tab-3':
         return html.Div([
-            html.H2('Pizza Types'),
+            html.H2('Pizza Types', style={'color': '#FFFFFF','fontSize': '24px'}),
             html.Label("Select a month:", style={'font-weight': 'bold', 'display': 'block', 'margin-bottom': '5px'}),
             dcc.Slider(
                 id='month-slider',
@@ -198,15 +210,24 @@ def render_content(tab):
         ])
     elif tab == 'tab-4':
         return html.Div([
-            html.H2('Pizza Sizes'),
-            dcc.Graph(
-                id='bar-chart',
-                figure=update_bar_chart()
-            ),
             dcc.Graph(
                 id='pie-chart',
-                figure=update_pie_chart()
-            )
+                figure=update_pie_chart()),
+                html.H2('When viewing the size distribution, it is clear that XL and XXL are not represented in the data.', style={'fontSize': '20px'}),
+                html.P(' This led me to discover some interesting insights when exploring the size data:', style={'fontSize': '16px'}),
+                html.P(' The following graph compares the sales of 3 pizzas that only come in unique sizes, agaisnt 5 median-selling pizza flavors', style={'fontSize': '16px'}),
+
+            dcc.Graph(
+                id='unique-graph',
+                figure=unique_graph()),
+                html.P('    - The name Big Meat suggests a large, hearty pizza, yet it is only available in Small Size. Despite this the Big Meat has a respectable # of sales', style={'fontSize': '14px'}),
+                html.P('    - Five Cheese is also only available in Large', style={'fontSize': '14px'}),
+                html.P('    - Brie Carrie is also only available in Small, and it is the worst selling pizza aswell', style={'fontSize': '14px'}),
+
+                dcc.Graph(
+                    id='the-greek',
+                    figure=the_greek()),
+                    html.P('    - The sizes for all pizza should be available in Small, Medium, Large, and X-Large.', style={'fontSize': '16px'}),
         ])
     elif tab == 'tab-5':
         return html.Div([
@@ -277,7 +298,8 @@ def update_heatmap(day):
     filtered_df = filtered_df.sort_values('hour')  
     filtered_df['quantity'] = filtered_df['quantity'] / 52 # divide by 52 weeks to get average per week, rather than total per year
     heatmap_fig = px.density_heatmap(filtered_df, x='hour', y='pizza_flavor', z='quantity', color_continuous_scale='RdYlGn')
-    heatmap_fig.update_layout(xaxis={'type': 'category'})  
+    heatmap_fig.update_layout(xaxis={'type': 'category'})
+    heatmap_fig.update_coloraxes(colorbar_title="Average sales")  # Update color bar title
 
     return style_graph(heatmap_fig)
 
@@ -364,12 +386,12 @@ def update_subplot_graph():
 
     # Create the subplot fig
     fig = sp.make_subplots(specs=[[{"secondary_y": True}]])
-    fig.add_trace(go.Scatter(x=months, y=adjusted_quantity, name='Total Quantity Sold', line=dict(color='green')), secondary_y=False)
+    fig.add_trace(go.Scatter(x=months, y=adjusted_quantity, name='Sales', line=dict(color='green')), secondary_y=False)
     fig.add_trace(go.Scatter(x=months, y=rainfall['rainfall'], name='Rainfall', line=dict(color='#3076ff')), secondary_y=True)
     fig.update_layout(
         xaxis=dict(title='Month', dtick=1),
         yaxis=dict(
-            title='Total Quantity Sold',
+            title='Sales per day',
             titlefont=dict(color='#7FDBFF'), # baby blue
             tickfont=dict(color='#7FDBFF')
         ),
@@ -427,13 +449,13 @@ def update_revenue_cost_rainfall_graph():
         y=rainfall_data['rainfall'],  # Actual Rainfall
         name='Rainfall',
         mode='lines+markers',
-        marker=dict(color='blue')
+        line=dict(color='#3076ff',dash='dash')
     ), secondary_y=False)
 
     fig.add_trace(go.Scatter(
         x=list(range(1, 13)),
         y=operating_costs,
-        name='Est. Daily Operating Costs(Based on revenue)',
+        name='Estimated Operarting Costs',
         mode='lines',
         line=dict(color='red')
     ), secondary_y=True)
@@ -441,21 +463,20 @@ def update_revenue_cost_rainfall_graph():
     fig.add_trace(go.Scatter(
         x=rainfall_data.index,
         y=optimized_operating_costs,
-        name='Optimized Operating Costs (Weather Adjusted)',
+        name='Optimized Operating Costs',
         mode='lines',
-        line=dict(color='green', dash='dot')
+        line=dict(color='green')
     ), secondary_y=True)
 
     # Layout updates
     fig.update_layout(
-        title='Est. Operating Cost vs. Rainfall Adjusted Operating Costs',
         xaxis_title='Month',
         xaxis=dict(tickvals=list(range(1, 13)), ticktext=[calendar.month_name[i] for i in range(1, 13)]),
     )
  
 
-    fig.update_yaxes(title_text="Rainfall (inches)", secondary_y=False)
-    fig.update_yaxes(title_text="Operating Cost ($)", secondary_y=True)
+    fig.update_yaxes(title_text="Rainfall (Inches)", secondary_y=True)
+    fig.update_yaxes(title_text="Operating Cost ($)", secondary_y=False)
 
     return style_graph(fig)
 
@@ -476,7 +497,7 @@ def update_scatterplot(selected_month):
     scatterplot_fig = px.scatter(flavor_popularity, x='pizza_flavor', y='quantity',
         color='category',  # Set the color of the circles based on the 'category'
         title='Popularity of Pizza Flavors by Category',
-        labels={'quantity': 'Total Quantity Sold'},
+        labels={'quantity': 'Sales'},
         size='quantity',  # Optional: Use the quantity as the size of the scatter plot markers
         hover_name='pizza_flavor')  # Optional: Show the pizza flavor name on hover
 
@@ -488,38 +509,61 @@ def update_scatterplot(selected_month):
 
 # I have the pie chart to evaluate if XL and XXL are viable options
 def update_pie_chart():
-    filtered_df = df[df['pizza_flavor'] == 'the_greek']
-    size_quantity = filtered_df.groupby('size')['quantity'].sum().reset_index()
+    sizes = df.groupby('size')['quantity'].sum().reset_index()
+    size_order = ['S', 'M', 'L', 'XL', 'XXL']
+    sizes['size'] = sizes['size'].astype('category')
+    sizes['size'] = sizes['size'].cat.set_categories(size_order)
+    sizes.sort_values("size", inplace=True)
 
-    pie_chart_fig = go.Figure(data=go.Pie(labels=size_quantity['size'], values=size_quantity['quantity']))
-
-    pie_chart_fig.update_layout(title='Pizza Sizes Distribution for "The Greek"',
-                                showlegend=True)
-
+    pie_color_pallete = ['rgb(210,242,212)', 'rgb(130,210,130)','rgb(73,170,0)','rgb(42,126,0)','rgb(0, 80, 26)']
+    pie_chart_fig = go.Figure(data=go.Pie(labels=sizes['size'], values=sizes['quantity'], marker=dict(colors=pie_color_pallete), hole=0.9, sort=False))
+    pie_chart_fig.update_layout(title='Sales Distribution by Sizes:',showlegend=True)
     return style_graph(pie_chart_fig)
 
-# I've removed the greek, brie carre, big meats, and five cheese because they would represent outlier
-# Because of their size options
-def update_bar_chart():
-    filtered_df_pie = df[df['pizza_flavor'] == 'the_greek']
-    filtered_df_bar = df.copy()
+def unique_graph():
+    unique_sizes = df.groupby('pizza_flavor')['size'].nunique()
+    unique_size_pizzas = unique_sizes[unique_sizes == 1]
+    unique_size_pizzas_df = df[df['pizza_flavor'].isin(unique_size_pizzas.index)]
+    median_orders = df.groupby('pizza_flavor')['quantity'].sum().median()
+    diff_from_median = abs(df.groupby('pizza_flavor')['quantity'].sum() - median_orders)
+    balanced_flavors = diff_from_median.nsmallest(5).index
+    balanced_flavors_df = df[df['pizza_flavor'].isin(balanced_flavors)]
+    combined_df = pd.concat([unique_size_pizzas_df, balanced_flavors_df])
+    combined_df['unique'] = np.where(combined_df['pizza_flavor'].isin(unique_size_pizzas.index), 'Only comes in one size', 'Small, Medium, or Large')
+    combined_flavor_popularity = combined_df.groupby(['pizza_flavor', 'unique'])['quantity'].sum().reset_index()
+    scatterplot_fig2 = go.Figure()
+    for color, group in combined_flavor_popularity.groupby('unique'):
+        scatterplot_fig2.add_trace(go.Scatter(
+            x=group['pizza_flavor'], 
+            y=group['quantity'],
+            mode='markers',
+            name=color,
+            hovertext=group['pizza_flavor']  # Show the pizza flavor name on hover
+        ))
 
-    excluded_sizes = ['XL', 'XXL']
-    filtered_df_bar = filtered_df_bar[~filtered_df_bar['size'].isin(excluded_sizes)]
+    scatterplot_fig2.update_layout(
+        title='Unique Pizza Flavors',
+        xaxis={'categoryorder': 'total descending', 'title': 'Pizza Flavor'},
+        yaxis={'title': 'Sales'}
+    )
 
-    excluded_pizza_types = ['big_meat', 'brie_carre', 'five_cheese']
-    filtered_df_bar = filtered_df_bar[~filtered_df_bar['pizza_flavor'].isin(excluded_pizza_types)]
+    return style_graph(scatterplot_fig2)
 
-    size_quantity_bar = filtered_df_bar.groupby('size')['quantity'].sum().reset_index().sort_values('quantity')
+def the_greek():
+    greek_df = df[df['pizza_flavor'] == 'the_greek']
+    greek_group = greek_df.groupby('size')['quantity'].sum().reset_index()
+    size_order = ['S', 'M', 'L', 'XL', 'XXL']
+    greek_group['size'] = greek_group['size'].astype('category')
+    greek_group['size'] = greek_group['size'].cat.set_categories(size_order)
+    greek_group.sort_values("size", inplace=True)
+    pie_color_pallete = ['rgb(210,242,212)', 'rgb(130,210,130)','rgb(73,170,0)','rgb(42,126,0)','rgb(0, 80, 26)']
 
-    bar_chart_fig = go.Figure(data=go.Bar(x=size_quantity_bar['size'], y=size_quantity_bar['quantity']))
+    greek_chart_fig = go.Figure(data=go.Pie(labels=greek_group['size'], values=greek_group['quantity'],marker=dict(colors=pie_color_pallete), sort= False, hole=0.9))
+    greek_chart_fig.update_layout(title='The Greek is the only pizza available in XL & XXL, Sizes Distribution for "The Greek" with Sales:',
+                                showlegend=True)
 
-    bar_chart_fig.update_layout(title='Orders by Size',
-                                xaxis_title='Size',
-                                yaxis_title='Total Quantity Sold')
 
-    return style_graph(bar_chart_fig)
-
+    return(style_graph(greek_chart_fig))
 
 if __name__ == '__main__':
     app.run_server()
