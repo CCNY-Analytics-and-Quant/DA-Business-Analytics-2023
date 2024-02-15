@@ -93,9 +93,9 @@ app.layout = html.Div(style={
     html.H1("Python for Business Analytics - Jean Batista", style={'color': '#FFFFFF','textAlign': 'center','fontSize':'30px'}), # center text color white 
     dcc.Tabs(id="tabs", value='tab-1', children=[
         dcc.Tab(label='Peak Hours', value='tab-1', style=tab_style, selected_style=tab_selected_style),
-        dcc.Tab(label='Weather Correlation', value='tab-2', style=tab_style, selected_style=tab_selected_style),
-        dcc.Tab(label='Variety', value='tab-3', style=tab_style, selected_style=tab_selected_style),
-        dcc.Tab(label='Sizes', value='tab-4', style=tab_style, selected_style=tab_selected_style),
+        dcc.Tab(label='Weather & Sales', value='tab-2', style=tab_style, selected_style=tab_selected_style),
+        dcc.Tab(label='Sizes & Sales', value='tab-3', style=tab_style, selected_style=tab_selected_style),
+        dcc.Tab(label='Pizza Categories', value='tab-4', style=tab_style, selected_style=tab_selected_style),
         dcc.Tab(label='GitHub', value='tab-5', style=tab_style, selected_style=tab_selected_style),
     ], style=tabs_styles),
     html.Div(id='content')
@@ -183,7 +183,38 @@ def render_content(tab):
         ])
         ])
         ])
+
     elif tab == 'tab-3':
+        return html.Div([
+            dcc.Graph(
+                id='pie-chart',
+                figure=update_pie_chart()),
+                html.H2('When viewing the size distribution, it is clear that XL and XXL are not represented in the data.', style={'fontSize': '20px'}),
+                html.P(' This led me to discover some interesting insights when exploring the size data:', style={'fontSize': '16px'}),
+                html.P(' The following graph compares the sales of 3 pizzas that only come in unique sizes, agaisnt 5 median-selling pizza flavors', style={'fontSize': '16px'}),
+
+            dcc.Graph(
+                id='unique-graph',
+                figure=unique_graph()),
+                html.P('    - The name Big Meat suggests a large, hearty pizza, yet it is only available in Small Size. Despite this the Big Meat has a respectable # of sales.', style={'fontSize': '14px'}), 
+                html.P('    - Five Cheese is also only available in Large', style={'fontSize': '14px'}),
+                html.P('    - Brie Carrie is also only available in Small, and it is the worst selling pizza aswell', style={'fontSize': '14px'}),
+
+                dcc.Graph(
+                    id='multiple-orders-graph',
+                    figure=multiple_orders_graph()),
+                    html.P('    - People may have ordered this the Big Meat in multiple quantities thinking it would be bigger, as the name implies it to be. ', style={'fontSize': '14px'}),
+
+                dcc.Graph(
+                    id='regular-orders-graph',
+                    figure=regular_orders_graph()),
+
+                dcc.Graph(
+                    id='the-greek',
+                    figure=the_greek()),
+                    html.P('    - The sizes for all pizza should be available in Small, Medium, Large, and X-Large.', style={'fontSize': '16px'}),
+        ])
+    elif tab == 'tab-4':
         return html.Div([
             html.H2('Pizza Types', style={'color': '#FFFFFF','fontSize': '24px'}),
             html.Label("Select a month:", style={'font-weight': 'bold', 'display': 'block', 'margin-bottom': '5px'}),
@@ -207,27 +238,6 @@ def render_content(tab):
                 figure=update_scatterplot(df['month'].min()),
                 style={'margin-top': '20px'}  # Add space above the graph
             )
-        ])
-    elif tab == 'tab-4':
-        return html.Div([
-            dcc.Graph(
-                id='pie-chart',
-                figure=update_pie_chart()),
-                html.H2('When viewing the size distribution, it is clear that XL and XXL are not represented in the data.', style={'fontSize': '20px'}),
-                html.P(' This led me to discover some interesting insights when exploring the size data:', style={'fontSize': '16px'}),
-                html.P(' The following graph compares the sales of 3 pizzas that only come in unique sizes, agaisnt 5 median-selling pizza flavors', style={'fontSize': '16px'}),
-
-            dcc.Graph(
-                id='unique-graph',
-                figure=unique_graph()),
-                html.P('    - The name Big Meat suggests a large, hearty pizza, yet it is only available in Small Size. Despite this the Big Meat has a respectable # of sales', style={'fontSize': '14px'}),
-                html.P('    - Five Cheese is also only available in Large', style={'fontSize': '14px'}),
-                html.P('    - Brie Carrie is also only available in Small, and it is the worst selling pizza aswell', style={'fontSize': '14px'}),
-
-                dcc.Graph(
-                    id='the-greek',
-                    figure=the_greek()),
-                    html.P('    - The sizes for all pizza should be available in Small, Medium, Large, and X-Large.', style={'fontSize': '16px'}),
         ])
     elif tab == 'tab-5':
         return html.Div([
@@ -548,6 +558,24 @@ def unique_graph():
     )
 
     return style_graph(scatterplot_fig2)
+
+def multiple_orders_graph():
+    df_multiple_orders = df[df['quantity'] > 1]
+    grouped_multiple_orders = df_multiple_orders.groupby('pizza_flavor')['quantity'].count().sort_values(ascending=False)
+
+    repeat_orders_fig = px.bar(grouped_multiple_orders.reset_index(), x='pizza_flavor', y='quantity', color='quantity', title='Repeat Orders by Pizza Flavor', labels={'quantity': 'Repeat Orders', 'pizza_flavor': 'Pizza Flavor'})
+
+    # Update x-axis settings
+    repeat_orders_fig.update_xaxes(nticks=len(grouped_multiple_orders))
+    repeat_orders_fig.update_layout(showlegend=False)
+    return style_graph((repeat_orders_fig))
+
+def regular_orders_graph():
+    grouped_all_orders = df.groupby('pizza_flavor')['quantity'].count().sort_values(ascending=False)
+    orders_fig = px.bar(grouped_all_orders.reset_index(), x='pizza_flavor', y='quantity', color='quantity', title='Total Orders by Pizza Flavor', labels={'quantity': 'Total Orders', 'pizza_flavor': 'Pizza Flavor'})
+    orders_fig.update_layout(showlegend=False)
+    orders_fig.update_xaxes(nticks=len(grouped_all_orders))
+    return style_graph((orders_fig))
 
 def the_greek():
     greek_df = df[df['pizza_flavor'] == 'the_greek']
