@@ -6,7 +6,7 @@ My task here is to prepare and perform analysis on sales data to create a report
 After completing a comprehensive analysis, I assisted this restaurant increase revenue and cut costs by about $258,941.
 
 
-[SQL | Python | Data Analysis Report/Presentation]([https://jbatistdata-6c1297044cbb.herokuapp.com/])
+[SQL | Python | Data Analysis Report/Presentation] [https://jbatistdata-6c1297044cbb.herokuapp.com/]
 
 
 ## Contact
