@@ -1,6 +1,7 @@
-# Python for Business Analytics 
+# Python for Business Analytics - jbatistdata.com
 
 ## Project Overview
+
 My task here is to prepare and perform analysis on sales data to create a report detailing the opportunities for this client. Including charts and graphs that support my proposal. This project therefore uses SQL, Python, and some business intelligence tools (PyPlot & Dash) to present a suitable, polished report/presentation.
 
 After completing a comprehensive analysis, I assisted this restaurant increase revenue and cut costs by about $258,941.
